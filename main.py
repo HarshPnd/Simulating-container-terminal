@@ -27,8 +27,14 @@ simulation_duration = get_simulation_duration()
 env = simpy.Environment()
 # Create an instance of the ContainerTerminal class
 terminal = ContainerTerminal(env)
+# Flag to track if any vessel has arrived
+vessel_arrival_flag = [False]
 # Start the vessel generator process
-env.process(vessel_generator(env, terminal))
+env.process(vessel_generator(env, terminal, vessel_arrival_flag))
 
 # Run the simulation for the specified duration
 env.run(until=simulation_duration)
+
+# Check if any vessel arrived during the simulation
+if not vessel_arrival_flag[0]:
+    print("No vessel arrived within the given simulation duration.")
